@@ -1,0 +1,61 @@
+name: Periphery (Detect Unused Code in PR)
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+      - master
+
+jobs:
+  periphery:
+    runs-on: macos-15
+    permissions:
+      pull-requests: write
+      statuses: write
+      contents: read
+    timeout-minutes: 10
+
+    env:
+      MINT_PATH: .mint/lib
+      MINT_LINK_PATH: .mint/bin
+      
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Select Xcode Version
+        run: sudo xcode-select -s /Applications/Xcode.app
+        
+      - name: Install mint
+        run: |
+          brew install mint
+
+      - name: Cache Mint Packages
+        uses: actions/cache@v4
+        with:
+          path: .mint
+          key: ${{ runner.os }}-mint-${{ hashFiles('**/Mintfile') }}
+          restore-keys: |
+            ${{ runner.os }}-mint-
+
+      - name: Install depenencies
+        run: |
+          mint bootstrap
+          gem install bundler
+          bundle install
+        
+      - name: Debug Mint Installation
+        run: |
+          mint list
+          mint which periphery
+
+      - name: Set Periphery Binary Path
+        run: |
+          echo "PERIPHERY_PATH=$(mint which periphery | tail -n 1 | tr -d '\n')" >> $GITHUB_ENV
+
+      - name: Run Danger
+        env:
+          echo "Periphery Binary Path: $PERIPHERY_PATH"
+          DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bundle exec danger --verbose

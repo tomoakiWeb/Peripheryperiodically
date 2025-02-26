@@ -1,0 +1,23 @@
+# macOS 関連ファイル
+.DS_Store
+
+# Xcode 関連ファイル
+DerivedData/
+*.xcuserdata
+*.xcworkspace
+*.xcuserstate
+
+# ビルドアーティファクト
+*.ipa
+*.xcarchive
+*.dSYM.zip
+
+# CocoaPods 関連ファイル
+Pods/
+
+# Swift Package Manager 関連ファイル
+.swiftpm/
+Package.resolved
+
+# Firebase 関連ファイル
+GoogleService-Info.plist
