@@ -1,4 +1,3 @@
-# Periphery のバイナリパスを指定 (必要なら)
 periphery.binary_path = ENV['PERIPHERY_PATH']
 # すべてのファイルに対して警告を表示
 periphery.scan_all_files = true
