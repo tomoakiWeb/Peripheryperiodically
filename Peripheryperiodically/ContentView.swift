@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    let peripery1:String = ""
     var body: some View {
         VStack {
             Image(systemName: "globe")
